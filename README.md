@@ -11,7 +11,7 @@
 
 
 ### 1. 필수 프로그램 설치
-Git 이 설치가 안되어있으면 필수로 설치 
+Git 이 설치가 안되어있으면 필수로 설치 , git 에 대한 이해 필요
 
 * **Git**: [https://git-scm.com/downloads](https://git-scm.com/downloads)
 * **Visual Studio Code 또는 Visual Studio**
