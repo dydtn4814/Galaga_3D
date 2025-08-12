@@ -3,7 +3,7 @@ using UnityEngine;
 public class BulletController : MonoBehaviour
 {
     // 총알 이동 속도
-    public float moveSpeed = 10.0f;
+    public float moveSpeed = 1000.0f;
     
     void Update()
     {
