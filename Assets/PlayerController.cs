@@ -12,6 +12,12 @@ public class PlayerController : MonoBehaviour
     // 다음 총알을 발사할 수 있는 시간
     private float nextFire = 0.0f;
 
+    // 회전 속도 (회전이 부드럽게 되도록)
+    public float rotationSpeed = 5f;
+
+    // Update에서 입력 값을 저장하고, FixedUpdate에서 움직임과 회전 적용
+    private Vector3 movementInput;
+
     void Update()
     {
         // 1. 키보드 입력 받기
@@ -27,15 +33,31 @@ public class PlayerController : MonoBehaviour
             upDownInput = -1.0f;
         }
         
-        // 2. 이동 방향 계산 및 적용
-        Vector3 movement = Vector3.right * horizontalInput + Vector3.forward * verticalInput + Vector3.up * upDownInput;
-        transform.Translate(movement * moveSpeed * Time.deltaTime, Space.World);
-        
-        // 3. 현재 시간이 다음 발사 시간보다 크면 총알 발사
+        // 이동 입력 값을 저장합니다.
+        movementInput = new Vector3(horizontalInput, upDownInput, verticalInput);
+
+        // 2. 총알 발사 로직 (Update에 유지 가능)
         if (Time.time > nextFire)
         {
             nextFire = Time.time + fireRate;
-            Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
+            Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         }
+    }
+
+    void FixedUpdate()
+    {
+        // 3. 움직임 적용
+        Vector3 moveDirection = transform.right * movementInput.x + transform.up * movementInput.y + transform.forward * movementInput.z;
+        transform.Translate(moveDirection * moveSpeed * Time.fixedDeltaTime, Space.World);
+
+        // 4. 회전 적용
+        Quaternion targetRotation = Quaternion.identity;
+        if (movementInput.y != 0)
+        {
+            float targetXRotation = -movementInput.y * 15f;
+            targetRotation = Quaternion.Euler(targetXRotation, 0, 0);
+        }
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
     }
 }
