@@ -9,6 +9,9 @@ public class PlayerController : MonoBehaviour
 
     // 총알 발사 속도 (1초에 몇 발)
     public float fireRate = 0.2f;
+    // 총알 속도
+    public float bulletSpeed = 50f;
+
     // 다음 총알을 발사할 수 있는 시간
     private float nextFire = 0.0f;
 
@@ -37,7 +40,8 @@ public class PlayerController : MonoBehaviour
         movementInput = new Vector3(horizontalInput, upDownInput, verticalInput);
 
         // 2. 총알 발사 로직 (Update에 유지 가능)
-        if (Time.time > nextFire)
+        // 스페이스바가 눌려있고, 다음 총알을 발사할 수 있는 시간이 되면 총알 발사
+        if (Input.GetKey(KeyCode.Space) && Time.time > nextFire)
         {
             nextFire = Time.time + fireRate;
             Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
